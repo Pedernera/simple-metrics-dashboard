@@ -4,6 +4,7 @@ type Props = {
   category: string;
   categories: string[];
   onCategory: (v: string) => void;
+  onReset: () => void;
 };
 
 export default function Filters({
@@ -12,6 +13,7 @@ export default function Filters({
   category,
   categories,
   onCategory,
+  onReset,
 }: Props) {
   return (
     <div
@@ -49,6 +51,19 @@ export default function Filters({
           </option>
         ))}
       </select>
+      <button
+        onClick={onReset}
+        style={{
+          padding: "8px 14px",
+          borderRadius: 8,
+          border: "1px solid #ddd",
+          background: "white",
+          cursor: "pointer",
+          fontWeight: 600,
+        }}
+      >
+        Limpiar
+      </button>
     </div>
   );
 }

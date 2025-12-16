@@ -10,8 +10,15 @@ import { toCSV, downloadCSV } from "../../utils/csv";
 
 export default function DashboardPage() {
   const { data, loading, error } = useMetrics();
-  const { search, setSearch, category, setCategory, categories, filtered } =
-    useFilters(data);
+  const {
+    search,
+    setSearch,
+    category,
+    setCategory,
+    categories,
+    filtered,
+    reset,
+  } = useFilters(data);
 
   const kpis = [
     { label: "Registros", value: String(filtered.length) },
@@ -41,6 +48,7 @@ export default function DashboardPage() {
             category={category}
             categories={categories}
             onCategory={setCategory}
+            onReset={reset}
           />
 
           <div

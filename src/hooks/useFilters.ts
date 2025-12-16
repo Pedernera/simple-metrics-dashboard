@@ -1,9 +1,13 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import type { MetricRecord } from "../types/record";
+import { useLocalStorage } from "./useLocalStorage";
 
 export function useFilters(data: MetricRecord[]) {
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("all");
+  const [search, setSearch] = useLocalStorage<string>("smd.search", "");
+  const [category, setCategory] = useLocalStorage<string>(
+    "smd.category",
+    "all"
+  );
 
   const categories = useMemo(() => {
     const set = new Set(data.map((d) => d.category));
@@ -22,6 +26,11 @@ export function useFilters(data: MetricRecord[]) {
     });
   }, [data, search, category]);
 
+  function reset() {
+    setSearch("");
+    setCategory("all");
+  }
+
   return {
     search,
     setSearch,
@@ -29,5 +38,6 @@ export function useFilters(data: MetricRecord[]) {
     setCategory,
     categories,
     filtered,
+    reset,
   };
 }
