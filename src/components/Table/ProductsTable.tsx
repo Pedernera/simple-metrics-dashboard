@@ -1,91 +1,61 @@
 import type { Product } from "../../types/product";
-import { getStockStatus } from "../../utils/stockStatus";
 
 export default function ProductsTable({ rows }: { rows: Product[] }) {
   return (
-    <div className="mt-8 overflow-hidden rounded-xl border border-slate-700">
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse min-w-190">
-          <thead className="bg-slate-950">
-            <tr>
-              <Th>Producto</Th>
-              <Th>Categoría</Th>
-              <Th align="right">Stock</Th>
-              <Th align="right">Precio</Th>
-              <Th align="center">Estado</Th>
-            </tr>
-          </thead>
+    <div className="mt-6 overflow-hidden rounded-xl border border-slate-700">
+      <table className="w-full border-collapse">
+        <thead className="bg-slate-950">
+          <tr>
+            <Th>Producto</Th>
+            <Th>Categoría</Th>
+            <Th align="right">Stock</Th>
+            <Th align="center">Estado</Th>
+            <Th align="right">Precio</Th>
+          </tr>
+        </thead>
 
-          <tbody className="bg-slate-800 text-slate-100">
-            {rows.map((p) => {
-              const status = getStockStatus(p);
-              const isBad = status !== "OK";
+        <tbody className="bg-slate-800 text-slate-100">
+          {rows.map((p) => {
+            const status =
+              p.stock === 0 ? "SIN STOCK" : p.stock <= 10 ? "BAJO" : "OK";
 
-              return (
-                <tr
-                  key={p.id}
-                  className={[
-                    "border-t border-slate-700/70 transition-colors",
-                    "hover:bg-slate-700",
-                    isBad ? "bg-slate-800/60" : "",
-                  ].join(" ")}
-                >
-                  <Td className="font-medium text-slate-100">{p.name}</Td>
-                  <Td className="text-slate-300">{p.category}</Td>
+            return (
+              <tr
+                key={p.id}
+                className="border-t border-slate-700 hover:bg-slate-700/40"
+              >
+                <Td className="font-medium">{p.name}</Td>
+                <Td className="text-slate-300">{p.category}</Td>
 
-                  <Td
-                    align="right"
-                    className={
-                      status === "SIN_STOCK"
-                        ? "text-red-300 font-semibold"
-                        : status === "BAJO"
-                        ? "text-amber-300 font-semibold"
-                        : "text-slate-100"
-                    }
+                <Td align="right" className="font-semibold">
+                  {p.stock}
+                </Td>
+
+                <Td align="center">
+                  <span
+                    className={`px-2 py-1 text-xs rounded-full font-semibold
+                      ${
+                        status === "OK"
+                          ? "bg-emerald-500/20 text-emerald-300"
+                          : status === "BAJO"
+                          ? "bg-amber-500/20 text-amber-300"
+                          : "bg-red-500/20 text-red-300"
+                      }`}
                   >
-                    {p.stock}
-                  </Td>
+                    {status}
+                  </span>
+                </Td>
 
-                  <Td align="right" className="text-slate-200">
-                    ${p.price.toFixed(2)}
-                  </Td>
-
-                  <Td align="center">
-                    <StatusBadge status={status} />
-                  </Td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+                <Td align="right">${p.price.toFixed(2)}</Td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }
 
-function StatusBadge({ status }: { status: "OK" | "BAJO" | "SIN_STOCK" }) {
-  if (status === "SIN_STOCK") {
-    return (
-      <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold bg-red-500/15 text-red-200 border border-red-500/30">
-        Sin stock
-      </span>
-    );
-  }
-  if (status === "BAJO") {
-    return (
-      <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold bg-amber-500/15 text-amber-200 border border-amber-500/30">
-        Bajo
-      </span>
-    );
-  }
-  return (
-    <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold bg-emerald-500/15 text-emerald-200 border border-emerald-500/30">
-      OK
-    </span>
-  );
-}
-
-/* helpers */
 function Th({
   children,
   align = "left",
@@ -95,14 +65,13 @@ function Th({
 }) {
   return (
     <th
-      className={[
-        "px-4 py-3 text-sm font-semibold text-slate-200 whitespace-nowrap",
+      className={`px-4 py-3 text-sm font-semibold text-slate-300 ${
         align === "right"
           ? "text-right"
           : align === "center"
           ? "text-center"
-          : "text-left",
-      ].join(" ")}
+          : "text-left"
+      }`}
     >
       {children}
     </th>
@@ -120,15 +89,13 @@ function Td({
 }) {
   return (
     <td
-      className={[
-        "px-4 py-3 text-[15px] whitespace-nowrap",
+      className={`px-4 py-3 text-sm ${
         align === "right"
           ? "text-right"
           : align === "center"
           ? "text-center"
-          : "text-left",
-        className,
-      ].join(" ")}
+          : "text-left"
+      } ${className}`}
     >
       {children}
     </td>

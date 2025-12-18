@@ -3,8 +3,13 @@ import { useLocalStorage } from "./useLocalStorage";
 import type { Product } from "../types/product";
 
 export function useFilters(data: Product[]) {
-  const [search, setSearch] = useLocalStorage<string>("inv.search", "");
-  const [category, setCategory] = useLocalStorage<string>("inv.category", "all");
+  const [search, setSearch] = useLocalStorage("inv.search", "");
+  const [category, setCategory] = useLocalStorage("inv.category", "all");
+  const [onlyCritical, setOnlyCritical] = useLocalStorage(
+    "inv.onlyCritical",
+    false
+  );
+  const [lowLimit, setLowLimit] = useLocalStorage<number>("inv.lowLimit", 10);
 
   const categories = useMemo(() => {
     const set = new Set(data.map((d) => d.category));
@@ -22,13 +27,18 @@ export function useFilters(data: Product[]) {
 
       const matchCategory = category === "all" || p.category === category;
 
-      return matchSearch && matchCategory;
+      const isCritical = p.stock === 0 || p.stock <= lowLimit;
+      const matchCritical = !onlyCritical || isCritical;
+
+      return matchSearch && matchCategory && matchCritical;
     });
-  }, [data, search, category]);
+  }, [data, search, category, onlyCritical, lowLimit]);
 
   function reset() {
     setSearch("");
     setCategory("all");
+    setOnlyCritical(false);
+    setLowLimit(10);
   }
 
   return {
@@ -37,6 +47,10 @@ export function useFilters(data: Product[]) {
     category,
     setCategory,
     categories,
+    onlyCritical,
+    setOnlyCritical,
+    lowLimit,
+    setLowLimit,
     filtered,
     reset,
   };
