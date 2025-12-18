@@ -1,6 +1,12 @@
 import type { Product } from "../../types/product";
 
-export default function ProductsTable({ rows }: { rows: Product[] }) {
+export default function ProductsTable({
+  rows,
+  onAdjustStock,
+}: {
+  rows: Product[];
+  onAdjustStock: (id: string, delta: number) => void;
+}) {
   return (
     <div className="mt-6 overflow-hidden rounded-xl border border-slate-700">
       <table className="w-full border-collapse">
@@ -27,8 +33,26 @@ export default function ProductsTable({ rows }: { rows: Product[] }) {
                 <Td className="font-medium">{p.name}</Td>
                 <Td className="text-slate-300">{p.category}</Td>
 
-                <Td align="right" className="font-semibold">
-                  {p.stock}
+                <Td align="right">
+                  <div className="flex items-center justify-end gap-2">
+                    <button
+                      onClick={() => onAdjustStock(p.id, -1)}
+                      className="h-7 w-7 rounded-md border border-slate-600 bg-slate-900 text-slate-100 hover:bg-slate-800"
+                    >
+                      -
+                    </button>
+
+                    <span className="w-10 text-right font-semibold">
+                      {p.stock}
+                    </span>
+
+                    <button
+                      onClick={() => onAdjustStock(p.id, +1)}
+                      className="h-7 w-7 rounded-md border border-slate-600 bg-slate-900 text-slate-100 hover:bg-slate-800"
+                    >
+                      +
+                    </button>
+                  </div>
                 </Td>
 
                 <Td align="center">
