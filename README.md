@@ -1,73 +1,68 @@
-# React + TypeScript + Vite
+# Simple Metrics Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Dashboard web construido con **React + TypeScript** para visualizar métricas, filtrar datos y exportarlos a Excel de forma simple y rápida.
 
-Currently, two official plugins are available:
+👉 Pensado para reemplazar Excel/Sheets en casos donde solo necesitás ver, filtrar y descargar datos sin sistemas complejos.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Demo
+🔗 https://simple-metrics-dashboard.vercel.app/
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## ✨ Features
+- KPIs automáticos:
+  - Total
+  - Promedio
+  - Máximo
+  - Cantidad de registros
+- Tabla de datos
+- Búsqueda por texto
+- Filtro por categoría
+- Exportación a CSV (compatible con Excel ES)
+- Persistencia de filtros (LocalStorage)
+- Sin backend
+- Deploy automático con Vercel
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🧩 Use cases
+- Freelancers que manejan reportes
+- Pequeños negocios
+- Creadores de contenido
+- Equipos chicos
+- Traders retail
+- Cualquier persona que hoy usa Excel solo para filtrar datos
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🛠️ Tech Stack
+- React
+- TypeScript
+- Vite
+- LocalStorage
+- CSV export
+- Vercel
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📸 Screenshots
+![Dashboard](screenshots/dashboard.png)
+![Filters](screenshots/filters.png)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+## 🧠 Arquitectura
+- Hooks personalizados (`useMetrics`, `useFilters`, `useLocalStorage`)
+- Componentes reutilizables
+- Datos desacoplados (mock / API ready)
+- Sin dependencias innecesarias
+
+---
+
+## 📦 Instalación local
+
+```bash
+npm install
+npm run dev
