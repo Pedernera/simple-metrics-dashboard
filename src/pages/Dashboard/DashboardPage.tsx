@@ -27,12 +27,18 @@ export default function DashboardPage() {
   } = useFilters(data);
 
   const top = highestStock(filtered);
+  const outOfStock = filtered.filter((p) => p.stock === 0).length;
+  const low = filtered.filter((p) => p.stock > 0 && p.stock <= 10).length;
+  const inventoryValue = filtered.reduce(
+    (acc, p) => acc + p.stock * p.price,
+    0
+  );
 
   const kpis = [
-    { label: "Productos", value: String(totalProducts(filtered)) },
-    { label: "Stock total", value: String(totalStock(filtered)) },
-    { label: "Stock bajo", value: String(lowStock(filtered)) },
-    { label: "Mayor stock", value: top ? top.name : "-" },
+    { label: "Productos", value: String(filtered.length) },
+    { label: "Valor inventario", value: `$${inventoryValue.toFixed(2)}` },
+    { label: "Stock bajo", value: String(low) },
+    { label: "Sin stock", value: String(outOfStock) },
   ];
 
   function handleExport() {
