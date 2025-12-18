@@ -5,7 +5,7 @@ export default function ProductsTable({ rows }: { rows: Product[] }) {
   return (
     <div className="mt-8 overflow-hidden rounded-xl border border-slate-700">
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse min-w-[760px]">
+        <table className="w-full border-collapse min-w-190">
           <thead className="bg-slate-950">
             <tr>
               <Th>Producto</Th>

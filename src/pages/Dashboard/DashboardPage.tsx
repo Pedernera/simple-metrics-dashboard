@@ -6,13 +6,6 @@ import KpiGrid from "../../components/KPI/KpiGrid";
 import ExportButton from "../../components/Table/ExportButton";
 import { toCSV, downloadCSV } from "../../utils/csv";
 
-import {
-  totalProducts,
-  totalStock,
-  lowStock,
-  highestStock,
-} from "../../utils/inventoryMetrics";
-
 export default function DashboardPage() {
   const { data, loading, error } = useProducts();
 
@@ -26,7 +19,6 @@ export default function DashboardPage() {
     reset,
   } = useFilters(data);
 
-  const top = highestStock(filtered);
   const outOfStock = filtered.filter((p) => p.stock === 0).length;
   const low = filtered.filter((p) => p.stock > 0 && p.stock <= 10).length;
   const inventoryValue = filtered.reduce(
