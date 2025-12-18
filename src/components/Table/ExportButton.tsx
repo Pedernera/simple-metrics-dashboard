@@ -1,19 +1,15 @@
 type Props = {
   onClick: () => void;
+  disabled?: boolean;
 };
 
-export default function ExportButton({ onClick }: Props) {
+export default function ExportButton({ onClick, disabled }: Props) {
   return (
     <button
       onClick={onClick}
-      style={{
-        padding: "8px 14px",
-        borderRadius: 8,
-        border: "1px solid #ddd",
-        background: "white",
-        cursor: "pointer",
-        fontWeight: 600,
-      }}
+      disabled={disabled}
+      className="rounded-lg bg-slate-100 text-slate-900 px-4 py-2 font-semibold
+                 hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
     >
       Exportar CSV
     </button>

@@ -1,26 +1,26 @@
 import { useMemo } from "react";
-import type { MetricRecord } from "../types/record";
 import { useLocalStorage } from "./useLocalStorage";
+import type { Product } from "../types/product";
 
-export function useFilters(data: MetricRecord[]) {
-  const [search, setSearch] = useLocalStorage<string>("smd.search", "");
-  const [category, setCategory] = useLocalStorage<string>(
-    "smd.category",
-    "all"
-  );
+export function useFilters(data: Product[]) {
+  const [search, setSearch] = useLocalStorage<string>("inv.search", "");
+  const [category, setCategory] = useLocalStorage<string>("inv.category", "all");
 
   const categories = useMemo(() => {
     const set = new Set(data.map((d) => d.category));
-    return Array.from(set);
+    return Array.from(set).sort();
   }, [data]);
 
   const filtered = useMemo(() => {
-    return data.filter((r) => {
-      const matchSearch =
-        search === "" ||
-        r.category.toLowerCase().includes(search.toLowerCase());
+    const s = search.trim().toLowerCase();
 
-      const matchCategory = category === "all" || r.category === category;
+    return data.filter((p) => {
+      const matchSearch =
+        s === "" ||
+        p.name.toLowerCase().includes(s) ||
+        p.category.toLowerCase().includes(s);
+
+      const matchCategory = category === "all" || p.category === category;
 
       return matchSearch && matchCategory;
     });

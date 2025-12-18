@@ -1,11 +1,8 @@
-import { mockData } from "../data/mock";
+import { products } from "../data/products";
 import { sleep } from "./sleep";
-import type { MetricRecord } from "../types/record";
+import type { Product } from "../types/product";
 
-export async function getMetrics(): Promise<MetricRecord[]> {
-  // simula latencia real
+export async function getProducts(): Promise<Product[]> {
   await sleep(600);
-
-  // (más adelante lo cambiamos por una API real)
-  return mockData;
+  return products;
 }

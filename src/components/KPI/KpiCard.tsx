@@ -5,17 +5,9 @@ type Props = {
 
 export default function KpiCard({ label, value }: Props) {
   return (
-    <div
-      style={{
-        border: "1px solid #e8e8e8",
-        borderRadius: 12,
-        padding: 14,
-        minWidth: 180,
-        background: "white",
-      }}
-    >
-      <div style={{ fontSize: 12, color: "#666" }}>{label}</div>
-      <div style={{ fontSize: 22, fontWeight: 700, marginTop: 6 }}>{value}</div>
+    <div className="bg-slate-900 border border-slate-700 rounded-xl p-4 flex flex-col gap-1 shadow-sm">
+      <span className="text-sm text-slate-400">{label}</span>
+      <span className="text-2xl font-bold text-slate-100">{value}</span>
     </div>
   );
 }

@@ -1,10 +1,7 @@
-import type { MetricRecord } from "../types/record";
-
-export function toCSV(rows: MetricRecord[]) {
+export function toCSV<T extends Record<string, any>>(rows: T[]) {
   if (rows.length === 0) return "";
 
   const separator = ";";
-
   const headers = Object.keys(rows[0]).join(separator);
 
   const lines = rows.map((r) =>

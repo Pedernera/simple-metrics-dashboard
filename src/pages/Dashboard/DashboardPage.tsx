@@ -1,15 +1,21 @@
-import { useMetrics } from "../../hooks/useMetrics";
+import { useProducts } from "../../hooks/useProducts";
 import { useFilters } from "../../hooks/useFilters";
-import MetricsTable from "../../components/Table/MetricsTable";
 import Filters from "../../components/Table/Filters";
-import ExportButton from "../../components/Table/ExportButton";
+import ProductsTable from "../../components/Table/ProductsTable";
 import KpiGrid from "../../components/KPI/KpiGrid";
-import { avgAmount, maxAmount, sumAmount } from "../../utils/metrics";
-import { formatNumber } from "../../utils/format";
+import ExportButton from "../../components/Table/ExportButton";
 import { toCSV, downloadCSV } from "../../utils/csv";
 
+import {
+  totalProducts,
+  totalStock,
+  lowStock,
+  highestStock,
+} from "../../utils/inventoryMetrics";
+
 export default function DashboardPage() {
-  const { data, loading, error } = useMetrics();
+  const { data, loading, error } = useProducts();
+
   const {
     search,
     setSearch,
@@ -20,52 +26,64 @@ export default function DashboardPage() {
     reset,
   } = useFilters(data);
 
+  const top = highestStock(filtered);
+
   const kpis = [
-    { label: "Registros", value: String(filtered.length) },
-    { label: "Total", value: formatNumber(sumAmount(filtered)) },
-    { label: "Promedio", value: formatNumber(avgAmount(filtered)) },
-    { label: "Máximo", value: formatNumber(maxAmount(filtered)) },
+    { label: "Productos", value: String(totalProducts(filtered)) },
+    { label: "Stock total", value: String(totalStock(filtered)) },
+    { label: "Stock bajo", value: String(lowStock(filtered)) },
+    { label: "Mayor stock", value: top ? top.name : "-" },
   ];
 
   function handleExport() {
     const csv = toCSV(filtered);
-    downloadCSV(csv, "metrics.csv");
+    downloadCSV(csv, "inventario.csv");
   }
 
   return (
-    <div style={{ padding: 24, fontFamily: "system-ui", maxWidth: 1000 }}>
-      <h1 style={{ margin: 0 }}>Simple Metrics Dashboard</h1>
-      <p style={{ marginTop: 8, color: "#555" }}>MVP — Día 5 (export CSV)</p>
-
-      {loading && <p>Cargando datos…</p>}
-      {error && <p style={{ color: "crimson" }}>Error: {error}</p>}
-
-      {!loading && !error && (
-        <>
-          <Filters
-            search={search}
-            onSearch={setSearch}
-            category={category}
-            categories={categories}
-            onCategory={setCategory}
-            onReset={reset}
-          />
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: 16,
-            }}
-          >
-            <KpiGrid items={kpis} />
-            <ExportButton onClick={handleExport} />
+    <div className="min-h-screen p-6">
+      <div className="max-w-6xl mx-auto bg-slate-800 rounded-xl shadow-lg p-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-100">
+              Inventory Dashboard
+            </h1>
+            <p className="text-slate-400 mt-1">
+              Control de stock de supermercado
+            </p>
+            <p className="text-slate-500 text-sm mt-1">
+              Mostrando {filtered.length} productos
+            </p>
           </div>
 
-          <MetricsTable rows={filtered} />
-        </>
-      )}
+          <div className="sm:pt-1">
+            <ExportButton
+              onClick={handleExport}
+              disabled={filtered.length === 0}
+            />
+          </div>
+        </div>
+
+        {loading && <p className="mt-6 text-slate-300">Cargando productos…</p>}
+        {error && <p className="mt-6 text-red-400">Error: {error}</p>}
+
+        {!loading && !error && (
+          <>
+            <Filters
+              search={search}
+              onSearch={setSearch}
+              category={category}
+              categories={categories}
+              onCategory={setCategory}
+              onReset={reset}
+            />
+
+            <KpiGrid items={kpis} />
+
+            <ProductsTable rows={filtered} />
+          </>
+        )}
+      </div>
     </div>
   );
 }
