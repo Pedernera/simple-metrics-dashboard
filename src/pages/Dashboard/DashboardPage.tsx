@@ -2,7 +2,6 @@ import { useProducts } from "../../hooks/useProducts";
 import { useFilters } from "../../hooks/useFilters";
 import Filters from "../../components/Table/Filters";
 import ProductsTable from "../../components/Table/ProductsTable";
-import KpiGrid from "../../components/KPI/KpiGrid";
 import ExportButton from "../../components/Table/ExportButton";
 import { toCSV, downloadCSV } from "../../utils/csv";
 
@@ -18,20 +17,6 @@ export default function DashboardPage() {
     filtered,
     reset,
   } = useFilters(data);
-
-  const outOfStock = filtered.filter((p) => p.stock === 0).length;
-  const low = filtered.filter((p) => p.stock > 0 && p.stock <= 10).length;
-  const inventoryValue = filtered.reduce(
-    (acc, p) => acc + p.stock * p.price,
-    0
-  );
-
-  const kpis = [
-    { label: "Productos", value: String(filtered.length) },
-    { label: "Valor inventario", value: `$${inventoryValue.toFixed(2)}` },
-    { label: "Stock bajo", value: String(low) },
-    { label: "Sin stock", value: String(outOfStock) },
-  ];
 
   function handleExport() {
     const csv = toCSV(filtered);
@@ -75,9 +60,6 @@ export default function DashboardPage() {
               onCategory={setCategory}
               onReset={reset}
             />
-
-            <KpiGrid items={kpis} />
-
             <ProductsTable rows={filtered} />
           </>
         )}
